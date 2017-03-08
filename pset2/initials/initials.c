@@ -3,42 +3,41 @@
 #include <ctype.h>
 #include "cs50.h"
 
+typedef enum {
+	whitespace = 0,
+	alpha = 1
+} search_type;
+
 string get_name();
-char find_next_character(int position, string input);
 
 int main(int argc, char *argv[]) {
 	string input = get_name();
 	int current_overall_index = 0;
 	char character = input[0];
-
+	int stop_index =  strlen(input);
+	bool last_whitespace;
+	 	
 	if (character == ' ') {
-		printf("%c", toupper(find_next_character(0, input)));
+		last_whitespace = true;
 	} else {
+		last_whitespace = false;
 		printf("%c", toupper(character));
 	}
-	
-	current_overall_index++;
 
-	for (int i = 1; i < strlen(input); i++) {
+	for (int i = 1; i < stop_index; i++) {
 		char character = input[i];
 		
-		if (character == ' ') {
-			printf("%c", toupper(find_next_character(i, input)));
+		if (last_whitespace && character == ' ') {
+			last_whitespace = true;
+		} else if (last_whitespace && character != ' ') {
+			printf("%c", toupper(character));
+			last_whitespace = false;
+		} else if (character == ' ') {
+			last_whitespace = true;
 		}
 	}	
 }
 
-char find_next_character(int position, string input) {
-	for(int i = position; i < strlen(input); i++) {
-		char character = input[i];
-		if (character == ' ') {
-			continue;
-		} else {
-			return character;
-		}
-	}
-}
-
 string get_name() {
-	return "    My Name";
+	return "    My    Name G  ";
 }
