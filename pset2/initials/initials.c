@@ -3,16 +3,10 @@
 #include <ctype.h>
 #include "cs50.h"
 
-typedef enum {
-	whitespace = 0,
-	alpha = 1
-} search_type;
-
 string get_name();
 
 int main(int argc, char *argv[]) {
 	string input = get_name();
-	int current_overall_index = 0;
 	char character = input[0];
 	int stop_index =  strlen(input);
 	bool last_whitespace;
@@ -25,19 +19,21 @@ int main(int argc, char *argv[]) {
 	}
 
 	for (int i = 1; i < stop_index; i++) {
-		char character = input[i];
+		char current_character = input[i];
 		
-		if (last_whitespace && character == ' ') {
+		if (last_whitespace && current_character == ' ') {
 			last_whitespace = true;
-		} else if (last_whitespace && character != ' ') {
-			printf("%c", toupper(character));
+		} else if (last_whitespace && current_character != ' ') {
+			printf("%c", toupper(current_character));
 			last_whitespace = false;
-		} else if (character == ' ') {
+		} else if (current_character == ' ') {
 			last_whitespace = true;
 		}
 	}	
+	
+	printf("\n");
 }
 
 string get_name() {
-	return "    My    Name G  ";
+	return get_string();
 }
