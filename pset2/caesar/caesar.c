@@ -4,48 +4,65 @@
 #include <ctype.h>
 #include "cs50.h"
 
-bool validate_input(int argc, char *argv[]);
+bool validate_input(int argc);
 int alpha_position(char letter);
+char letter_at_position(int position);
+string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 int main(int argc, char *argv[]) {
-	bool valid_input = validate_input(argc, argv);
+	bool valid_input = validate_input(argc);
 	
 	if (!valid_input) {
 		return 1;
 	}
 	
-	int cipher = atoi(argv[1]);
-	printf("cipher: %i\n", cipher);
+	printf("plaintext: ");
 	
-	printf("plaintext:");
+	int cipher = atoi(argv[1]);
 	string plain_text = get_string(); 
+	
+	printf("ciphertext: ");
 	
 	for (int i = 0; i < strlen(plain_text); i++) {
 		char letter = plain_text[i];			
 		if (isalpha(letter)) {
-			int position = alpha_position(letter);
-			printf("Position: %i\n", position);						
+			int position = alpha_position(tolower(letter));
+			int adjusted_position = (position + cipher) % 26;
+			char cipher_letter = letter_at_position(adjusted_position);
+			char ciphered_cased = cipher_letter;
+			
+			if (isupper(letter)) {
+				ciphered_cased	= toupper(ciphered_cased);
+			} else {
+				ciphered_cased = tolower(ciphered_cased);
+			}
+			
+			printf("%c", ciphered_cased);
 		} else {
-			printf("%c\n", letter);
+			printf("%c", letter);
 		}
 	}
-
+	
+	printf("\n");
+	return 0;
 }
 
-bool validate_input(int argc, char *argv[]) {
+bool validate_input(int argc) {
 	if (argc != 2) {
-		printf("Invalid arguments");
+		printf("Invalid arguments\n");
 		return false;
 	}
-	
-	printf("Valid input\n");
 	
 	return true;
 }
 
+char letter_at_position(int position) {
+	char item = alphabet[position];
+	return item;	
+}
+
 int alpha_position(char letter) {
 	int position = -1;
-	string alphabet = "abcdefghijklmnopqrstuvwxyz";
 	
 	for (int i = 0; i < strlen(alphabet); i++) {
 		char letter_to_check = alphabet[i];
@@ -56,10 +73,4 @@ int alpha_position(char letter) {
 	}
 	
 	return position;
-}
-
-
-
-
-
- 
+} 
